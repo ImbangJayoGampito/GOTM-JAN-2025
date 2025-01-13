@@ -42,7 +42,7 @@ public class Camera : MonoBehaviour
         yRotation += mouseX;
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90.0f, 90.0f);
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(xRotation, yRotation, 0), rotateLerp);
+
 
     }
     void CameraFirstPerson()
@@ -53,7 +53,7 @@ public class Camera : MonoBehaviour
             return;
         }
         CameraRotation();
-
+        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
     }
     void CameraZoom()
     {
@@ -71,13 +71,13 @@ public class Camera : MonoBehaviour
         }
         if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
         {
-            zoom_value = Math.Clamp(zoom_value - 1, 0, max_zoom);
+            zoom_value--;
         }
         else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
         {
-            zoom_value = Math.Clamp(zoom_value + 1, 0, max_zoom);
+            zoom_value++;
         }
-
+        zoom_value = Math.Clamp(zoom_value, 0, max_zoom);
     }
     void CameraThirdPerson()
     {
@@ -91,12 +91,13 @@ public class Camera : MonoBehaviour
 
         Vector3 desiredPosition = target.transform.position + rotation * direction;
         desiredPosition = AccountForWalls(desiredPosition, target.transform.position);
-        transform.position = desiredPosition;
+
         if (Input.GetMouseButton((int)global.controller.moveCamera))
         {
             CameraRotation();
         }
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, rotateLerp);
+        transform.rotation = rotation;
+        transform.position = desiredPosition;
     }
     Vector3 AccountForWalls(Vector3 cameraPosition, Vector3 targetPosition)
     {
@@ -127,7 +128,7 @@ public class Camera : MonoBehaviour
             // Debug.Log("No hit detected.");
 
         }
-        Debug.DrawLine(targetPosition, cameraPosition, Color.red);
+       
         return cameraPosition;
     }
 }

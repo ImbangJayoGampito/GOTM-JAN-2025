@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
 
     Global global;
     public GameObject cameraTarget;
+    bool onGround = true;
+    Vector3 size;
     Entity entity;
     private Vector3 moveDirection = Vector3.zero;
     bool isSprinting;
@@ -16,9 +18,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         global = Global.Instance;
-
         if (global == null)
-
         {
 
             Debug.LogError("Global instance is null. Make sure the Global object is present in the scene.");
@@ -28,9 +28,24 @@ public class PlayerMovement : MonoBehaviour
         }
         entity = gameObject.GetComponent<Entity>();
         rb = gameObject.GetComponent<Rigidbody>();
+        size = GetGameObjectSize();
 
     }
+    Vector3 GetGameObjectSize()
 
+    {
+        Collider collider = GetComponent<Collider>();
+        if (collider != null)
+        {
+            return collider.bounds.size; // Returns the size of the bounds
+        }
+        else
+        {
+            Debug.LogWarning("No Collider found on this GameObject.");
+            return Vector3.zero; // Return zero if no collider is found
+        }
+
+    }
     // Update is called once per frame
     void Update()
     {
@@ -41,7 +56,32 @@ public class PlayerMovement : MonoBehaviour
         }
         transform.rotation = cameraTarget.transform.rotation;
         MovePlayer();
+        JumpFunction();
+    }
+    void JumpFunction()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, size.y / 2 * 1.05f))
+        {
+            onGround = true;
+        }
+        else
+        {
+            onGround = false;
+        }
+        Debug.Log(onGround);
+        // Debug.DrawRay(transform.position, Vector3.down * size.y / 2 * 1.1f, Color.red);
+        if (!onGround)
+        {
 
+            return;
+        }
+        if (Input.GetKeyDown(global.controller.jump))
+        {
+            rb.AddForce(Vector3.up * entity.stats.movementSpeed, ForceMode.Impulse);
+            Debug.Log("meowww");
+
+        }
     }
 
     void MovePlayer()
