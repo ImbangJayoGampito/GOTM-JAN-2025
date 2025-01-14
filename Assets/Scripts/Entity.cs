@@ -12,16 +12,24 @@ public interface IHealth
 
 
 }
-[CreateAssetMenu(fileName = "EntityStats", menuName = "ScriptableObjects/EntityStats", order = 1)]
-
-public class EntityStats : ScriptableObject, IHealth
+[CreateAssetMenu(fileName = "EntityStats", menuName = "Stats/Entity", order = 1)]
+public class EntityStats : ScriptableObject, ICloneable
 {
     public int maxHealth;
     public float movementSpeed;
     public string name;
+    public float attackCooldown;
     public int damage;
     public float jumpStrength;
-    public int currentHealth;
+    int currentHealth;
+    public int getHealth()
+    {
+        return this.currentHealth;
+    }
+    public void setHealth(int health)
+    {
+        this.currentHealth = health;
+    }
     public bool isInvincible;
     public void Initialize()
     {
@@ -29,24 +37,10 @@ public class EntityStats : ScriptableObject, IHealth
 
     }
 
-    public IEnumerator invincibleCooldown(float timeSeconds)
-    {
-        yield return new WaitForSeconds(timeSeconds);
-        isInvincible = false;
-    }
-    public void Damage(int damage)
-    {
-        if (isInvincible == true)
-        {
-            return;
-        }
-        this.currentHealth -= damage;
-        if (currentHealth < 0)
-            currentHealth = 0;
-    }
 
 
-    public EntityStats Clone()
+
+    public object Clone()
 
     {
         EntityStats clone = ScriptableObject.CreateInstance<EntityStats>();
@@ -57,25 +51,27 @@ public class EntityStats : ScriptableObject, IHealth
         clone.jumpStrength = this.jumpStrength;
         clone.currentHealth = this.currentHealth;
         clone.isInvincible = this.isInvincible;
+        clone.attackCooldown = this.attackCooldown;
         return clone;
     }
 
 }
-public class Entity : MonoBehaviour
+public class Entity : MonoBehaviour, IHealth
 {
     public EntityStats stats;
+    public EntityType type;
     public void Initialize(EntityStats stats)
 
     {
-        this.stats = stats.Clone(); 
+        this.stats = (EntityStats)stats.Clone();
         this.stats.Initialize();
         InitiateProperties();
     }
     public void Awake()
     {
-        EntityStats clonedStats = stats.Clone();
-        clonedStats.Initialize(); 
-        this.stats = clonedStats; 
+        EntityStats clonedStats = (EntityStats)stats.Clone();
+        clonedStats.Initialize();
+        this.stats = clonedStats;
         InitiateProperties();
     }
     public void InitiateProperties()
@@ -85,7 +81,7 @@ public class Entity : MonoBehaviour
     }
     public void Kill()
     {
-        this.stats.currentHealth = 0;
+        this.stats.setHealth(0);
     }
     public enum Condition
     {
@@ -109,4 +105,22 @@ public class Entity : MonoBehaviour
         }
     }
     public Dictionary<Condition, bool> conditions;
+    public IEnumerator invincibleCooldown(float timeSeconds)
+    {
+        yield return new WaitForSeconds(timeSeconds);
+        stats.isInvincible = false;
+    }
+    public void Damage(int damage)
+    {
+        if (stats.isInvincible == true)
+        {
+            return;
+        }
+        this.stats.setHealth(this.stats.getHealth() - damage);
+        if (stats.getHealth() <= 0)
+        {
+            stats.setHealth(0);
+
+        }
+    }
 }

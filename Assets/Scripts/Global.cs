@@ -1,5 +1,4 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Global : MonoBehaviour
@@ -17,8 +16,8 @@ public class Global : MonoBehaviour
 
         public KeyCode sprint = KeyCode.LeftShift;
 
-        public MouseButton attack = MouseButton.Left;
-        public MouseButton moveCamera = MouseButton.Right;
+        public int attack = 0;
+        public int moveCamera = 1;
 
     }
     public Controller controller;

@@ -1,7 +1,8 @@
 using UnityEngine;
 using System;
-using NUnit.Framework.Constraints;
-using UnityEditor.Callbacks;
+using UnityEngine.InputSystem;
+
+using System.Windows.Input;
 public class Camera : MonoBehaviour
 {
     public GameObject target;
@@ -9,6 +10,8 @@ public class Camera : MonoBehaviour
     int max_zoom = 10;
     public float moveLerp = 0.4f;
     public float rotateLerp = 0.4f;
+    Vector2 mousePos;
+    Camera camera;
     Global global;
     enum CameraMode
     {
@@ -26,6 +29,7 @@ public class Camera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         target.transform.rotation = Quaternion.Euler(0, yRotation, 0); ;
         CameraFirstPerson();
         CameraThirdPerson();
@@ -95,7 +99,14 @@ public class Camera : MonoBehaviour
         if (Input.GetMouseButton((int)global.controller.moveCamera))
         {
             CameraRotation();
+            Cursor.SetCursor(null, mousePos, CursorMode.Auto);
+
         }
+        else
+        {
+            mousePos = Input.mousePosition;
+        }
+
         transform.rotation = rotation;
         transform.position = desiredPosition;
     }
@@ -128,7 +139,7 @@ public class Camera : MonoBehaviour
             // Debug.Log("No hit detected.");
 
         }
-       
+
         return cameraPosition;
     }
 }

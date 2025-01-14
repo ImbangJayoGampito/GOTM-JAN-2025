@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework.Constraints;
+using Unity.VisualScripting;
 using UnityEditor.Callbacks;
 using UnityEngine;
 
@@ -46,9 +47,16 @@ public class PlayerMovement : MonoBehaviour
         }
 
     }
+    private void OnDrawGizmos()
+    {
+        Vector3 from = new(0, 0, 0);
+        Vector3 to = new(5f, 5f, 5f);
+        Gizmos.DrawLine(from, to);
+    }
     // Update is called once per frame
     void Update()
     {
+
 
         if (entity.conditions[Entity.Condition.Frozen] == true)
         {
@@ -69,7 +77,6 @@ public class PlayerMovement : MonoBehaviour
         {
             onGround = false;
         }
-        Debug.Log(onGround);
         // Debug.DrawRay(transform.position, Vector3.down * size.y / 2 * 1.1f, Color.red);
         if (!onGround)
         {
@@ -78,7 +85,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetKeyDown(global.controller.jump))
         {
-            rb.AddForce(Vector3.up * entity.stats.movementSpeed, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * entity.stats.jumpStrength * 1000, ForceMode.Impulse);
             Debug.Log("meowww");
 
         }
@@ -86,9 +93,9 @@ public class PlayerMovement : MonoBehaviour
 
     void MovePlayer()
     {
+
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
-
         float moveX = 0;
         float moveZ = 0;
 
@@ -115,12 +122,36 @@ public class PlayerMovement : MonoBehaviour
             moveX *= global.physics.sprintMultiplier; // Apply sprint multiplier
             moveZ *= global.physics.sprintMultiplier; // Apply sprint multiplier
         }
-        moveDirection = ((transform.forward * moveZ) + (transform.right * moveX)).normalized;
+        moveDirection = ((forward * moveZ) + (right * moveX)).normalized;
+
         // Create the movement vector
-        rb.MovePosition(rb.position + moveDirection * Time.deltaTime * entity.stats.movementSpeed); // Move the Rigidbody
+        // Move the Rigidbody
     }
+    void FixedUpdate()
+    {
 
+        Vector3 desiredVelocity = moveDirection * entity.stats.movementSpeed;
 
+        if (desiredVelocity.magnitude <= entity.stats.movementSpeed)
+        {
 
+            rb.AddForce(desiredVelocity * Time.fixedDeltaTime * 5.0f, ForceMode.VelocityChange);
 
+        }
+        else
+        {
+            desiredVelocity = desiredVelocity.normalized * entity.stats.movementSpeed;
+            rb.linearVelocity = new Vector3(desiredVelocity.x, rb.linearVelocity.y, desiredVelocity.z);
+        }
+        if (onGround)
+        {
+            // rb.linearDamping = global.physics.friction;
+        }
+        else
+        {
+            // rb.linearDamping = 0;
+        }
+
+        rb.linearDamping = global.physics.friction * (onGround == true ? global.physics.ground_multiply : 1);
+    }
 }
