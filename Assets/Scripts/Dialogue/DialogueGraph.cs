@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class DialogueNode
 {
-    public String name;
+    public String dialogueId;
     public List<string> dialogue;
     public List<DialogueDirection> dialogueOptions;
     public bool AppendEdge(DialogueDirection nextDialogue)
@@ -38,19 +38,19 @@ public class DialogueGraph
     DialogueNode currentDialogue;
     public void StartDialogue(DialogueNode startingDialogue)
     {
-        if (!dialogues.ContainsKey(startingDialogue.name)) // Check if the dialogue already exists
+        if (!dialogues.ContainsKey(startingDialogue.dialogueId)) // Check if the dialogue already exists
         {
-            dialogues.Add(startingDialogue.name, startingDialogue);
+            dialogues.Add(startingDialogue.dialogueId, startingDialogue);
             currentDialogue = startingDialogue; // Set the current dialogue
         }
     }
     public bool AddDialogueOption(DialogueNode existingDialogue, DialogueNode dialogueToAdd, String dialogueShow)
     {
-        DialogueDirection toAdd = new DialogueDirection(dialogueToAdd.name, dialogueShow);
+        DialogueDirection toAdd = new DialogueDirection(dialogueToAdd.dialogueId, dialogueShow);
         bool success = existingDialogue.AppendEdge(toAdd);
         if (success)
         {
-            dialogues.Add(dialogueToAdd.name, dialogueToAdd);
+            dialogues.Add(dialogueToAdd.dialogueId, dialogueToAdd);
         }
         return success;
     }
