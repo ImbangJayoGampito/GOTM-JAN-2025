@@ -33,7 +33,6 @@ public class PlayerEntity : MonoBehaviour
     {
 
         // Called when the collider/rigidbody enters the trigger
-        Debug.Log("Collided");
         Entity other = collision.gameObject.GetComponent<Entity>();
         if (other != null)
         {

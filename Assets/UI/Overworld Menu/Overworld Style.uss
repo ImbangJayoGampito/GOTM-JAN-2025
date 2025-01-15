@@ -1,0 +1,21 @@
+VisualElement {
+}
+
+.inventory {
+    align-items: auto;
+    justify-content: center;
+    align-self: auto;
+    align-content: auto;
+    width: 20%;
+    height: 100%;
+    -unity-background-image-tint-color: rgb(252, 44, 0);
+    transform-origin: center;
+}
+
+.bottom {
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    align-content: center;
+    flex-direction: row;
+}

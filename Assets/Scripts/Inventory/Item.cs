@@ -21,7 +21,7 @@ public enum Type
 public class ItemStats : ScriptableObject, ICloneable
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public string itemName;
+    public new string name;
     [TextArea]
     public string description;
     public int value;
@@ -35,6 +35,7 @@ public class ItemStats : ScriptableObject, ICloneable
     public void Awake()
     {
         SetMaxStack();
+
     }
     public int GetMaxStack()
     {
@@ -67,7 +68,7 @@ public class ItemStats : ScriptableObject, ICloneable
     public object Clone()
     {
         ItemStats clone = ScriptableObject.CreateInstance<ItemStats>();
-        clone.itemName = this.itemName;
+        clone.name = this.name;
         clone.description = this.description;
         clone.value = this.value;
         clone.type = this.type;
@@ -82,10 +83,14 @@ public class ItemStats : ScriptableObject, ICloneable
 public class Item : MonoBehaviour
 {
     public ItemStats stats;
-    private int amount = 0;
+    private int currentAmount = 0;
+    public int startingAmount;
     public void Awake()
     {
         this.stats = (ItemStats)this.stats.Clone();
+        this.stats.SetMaxStack();
+        this.currentAmount = startingAmount;
+        // Debug.Log("Max stack for " + stats.type + " is now: " + stats.GetMaxStack());
     }
     public Type GetItemType()
     {
@@ -98,11 +103,27 @@ public class Item : MonoBehaviour
     public static Item EmptyItem()
     {
         Item item = new Item();
+        item.stats = new ItemStats();
         item.stats.name = "Empty";
         item.stats.value = 0;
         item.stats.type = Type.Empty;
         item.stats.damage = 0;
         item.stats.SetMaxStack();
+        return item;
+    }
+    public void SetAmount(int amount)
+    {
+        this.currentAmount = amount;
+        if (this.currentAmount <= 0)
+        {
+            SetItemType(Type.Empty);
+        }
+    }
+    public Item Clone()
+    {
+        Item item = new Item();
+        item.stats = (ItemStats)this.stats.Clone();
+        item.currentAmount = this.currentAmount;
         return item;
     }
     public bool IsEmpty()
@@ -116,7 +137,7 @@ public class Item : MonoBehaviour
         {
             return false; // If the other item is null, they are not equal
         }
-        return this.stats.itemName == other.stats.itemName &&
+        return this.stats.name == other.stats.name &&
                this.stats.description == other.stats.description &&
                this.stats.value == other.stats.value &&
                this.stats.type == other.stats.type &&
@@ -125,16 +146,9 @@ public class Item : MonoBehaviour
                this.stats.icon == other.stats.icon && // Compare icon if necessary
                this.stats.equipSound == other.stats.equipSound; // Compare equipSound if necessary
     }
-    public void ChangeAmount(int amount)
-    {
-        this.amount += amount;
-        if (this.amount <= 0)
-        {
-            SetItemType(Type.Empty);
-        }
-    }
+
     public int GetAmount()
     {
-        return amount;
+        return this.currentAmount;
     }
 }

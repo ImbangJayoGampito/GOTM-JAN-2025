@@ -11,7 +11,6 @@ public class Camera : MonoBehaviour
     public float moveLerp = 0.4f;
     public float rotateLerp = 0.4f;
     Vector2 mousePos;
-    Camera camera;
     Global global;
     enum CameraMode
     {
@@ -127,7 +126,6 @@ public class Camera : MonoBehaviour
             // Debug.Log("Hit Point: " + hit.point);
 
             // Debug.Log("Distance: " + hit.distance);
-
             Vector3 newCameraPosition = hit.point - direction;
             return newCameraPosition;
         }
