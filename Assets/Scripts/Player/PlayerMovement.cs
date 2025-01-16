@@ -9,6 +9,16 @@ public class PlayerMovement : MonoBehaviour
 
     Global global;
     public GameObject cameraTarget;
+    public int maxStamina;
+    private int currentStamina;
+    public int staminaRegenerationRate;
+    public int GetCurrentStamina()
+    {
+        return this.currentStamina;
+    }
+    Cooldown staminaCooldown;
+    Cooldown staminaExhaust;
+    bool isRunning = false;
     bool onGround = true;
     Vector3 size;
     Entity entity;
@@ -30,6 +40,12 @@ public class PlayerMovement : MonoBehaviour
         entity = gameObject.GetComponent<Entity>();
         rb = gameObject.GetComponent<Rigidbody>();
         size = GetGameObjectSize();
+        currentStamina = maxStamina;
+        staminaExhaust = gameObject.AddComponent<Cooldown>();
+        staminaExhaust.CooldownByRate((int)(entity.GetSprintingMultiplier() - 1) * staminaRegenerationRate);
+        // Debug.Log((entity.GetSprintingMultiplier() - 1) * staminaRegenerationRate);
+        staminaCooldown = gameObject.AddComponent<Cooldown>();
+        staminaCooldown.CooldownByRate(staminaRegenerationRate);
 
     }
     Vector3 GetGameObjectSize()
@@ -65,6 +81,42 @@ public class PlayerMovement : MonoBehaviour
         transform.rotation = cameraTarget.transform.rotation;
         MovePlayer();
         JumpFunction();
+        StaminaRegeneration();
+        Sprint();
+    }
+    void StaminaRegeneration()
+    {
+        if (isRunning)
+        {
+            return;
+        }
+        if (staminaCooldown.IsCooldown())
+        {
+            return;
+        }
+        // Debug.Log("stamina regen meow!");
+        currentStamina = Math.Clamp(currentStamina + 1, 0, maxStamina);
+    }
+    void Sprint()
+    {
+        if (currentStamina <= 0)
+        {
+            isRunning = false;
+            return;
+        }
+        if (Input.GetKeyDown(global.controller.sprint))
+        {
+            isRunning = true;
+        }
+        if (Input.GetKeyUp(global.controller.sprint))
+        {
+            isRunning = false;
+        }
+        if (!staminaExhaust.IsCooldown() && isRunning)
+        {
+            // Debug.Log("meow tired!");
+            currentStamina = Math.Clamp(currentStamina - 1, 0, maxStamina);
+        }
     }
     void JumpFunction()
     {
@@ -83,10 +135,12 @@ public class PlayerMovement : MonoBehaviour
 
             return;
         }
-        if (Input.GetKeyDown(global.controller.jump))
+        int staminaCost = 10;
+        if (Input.GetKeyDown(global.controller.jump) && currentStamina >= staminaCost)
         {
             rb.AddForce(Vector3.up * entity.stats.jumpStrength * 1000, ForceMode.Impulse);
-            Debug.Log("meowww");
+            currentStamina = Math.Clamp(currentStamina - staminaCost, 0, 100);
+            // Debug.Log("meowww");
 
         }
     }
@@ -117,11 +171,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Check for sprinting
-        if (Input.GetKey(global.controller.sprint))
-        {
-            moveX *= global.physics.sprintMultiplier; // Apply sprint multiplier
-            moveZ *= global.physics.sprintMultiplier; // Apply sprint multiplier
-        }
+
+
         moveDirection = ((forward * moveZ) + (right * moveX)).normalized;
 
         // Create the movement vector
@@ -129,10 +180,12 @@ public class PlayerMovement : MonoBehaviour
     }
     void FixedUpdate()
     {
+        float sprintMultiplier = isRunning ? entity.GetSprintingMultiplier() : 1;
 
-        Vector3 desiredVelocity = moveDirection * entity.stats.movementSpeed;
+        Vector3 desiredVelocity = moveDirection * entity.stats.movementSpeed * sprintMultiplier;
 
-        if (desiredVelocity.magnitude <= entity.stats.movementSpeed)
+        // Debug.Log( entity.stats.movementSpeed * sprintMultiplier);
+        if (desiredVelocity.magnitude <= entity.stats.movementSpeed * sprintMultiplier)
         {
 
             rb.AddForce(desiredVelocity * Time.fixedDeltaTime * 5.0f, ForceMode.VelocityChange);

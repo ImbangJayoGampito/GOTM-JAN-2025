@@ -34,7 +34,7 @@ public class Global : MonoBehaviour
     {
         public float friction = 2f;
         public float ground_multiply = 3.0f;
-        public float sprintMultiplier = 1.25f;
+
     }
     public class Mechanic
     {

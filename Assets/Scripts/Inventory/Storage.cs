@@ -141,7 +141,7 @@ public class Storage : MonoBehaviour
             // Debug.Log("item max stack = " + other.stats.type);
             if (result.IsEmpty())
             {
-                Destroy(other.gameObject);
+                Destroy(collision.gameObject);
             }
         }
 

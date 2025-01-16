@@ -87,7 +87,16 @@ public class Item : MonoBehaviour
     public int startingAmount;
     public void Awake()
     {
-        this.stats = (ItemStats)this.stats.Clone();
+        if (this.stats == null)
+        {
+            this.stats = ScriptableObject.CreateInstance<ItemStats>();
+        }
+        else
+        {
+            this.stats = (ItemStats)this.stats.Clone();
+        }
+
+
         this.stats.SetMaxStack();
         this.currentAmount = startingAmount;
         // Debug.Log("Max stack for " + stats.type + " is now: " + stats.GetMaxStack());
@@ -101,15 +110,22 @@ public class Item : MonoBehaviour
         this.stats.type = type;
     }
     public static Item EmptyItem()
+
     {
-        Item item = new Item();
-        item.stats = new ItemStats();
+
+        GameObject gameObject = new GameObject("EmptyItem");
+
+        Item item = gameObject.AddComponent<Item>();
+
         item.stats.name = "Empty";
+        item.stats.description = "Such emptiness!";
         item.stats.value = 0;
         item.stats.type = Type.Empty;
         item.stats.damage = 0;
         item.stats.SetMaxStack();
+
         return item;
+
     }
     public void SetAmount(int amount)
     {
@@ -121,7 +137,8 @@ public class Item : MonoBehaviour
     }
     public Item Clone()
     {
-        Item item = new Item();
+        GameObject gameObject = new GameObject("ClonedItem");
+        Item item = gameObject.AddComponent<Item>();
         item.stats = (ItemStats)this.stats.Clone();
         item.currentAmount = this.currentAmount;
         return item;

@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EntityStats
   maxHealth: 100
   movementSpeed: 5
+  sprintMultiplier: 3
   name: Player
+  attackCooldown: 0
+  healthRegenerationRate: 0
   damage: 10
   jumpStrength: 10
-  currentHealth: 100
   isInvincible: 0

@@ -17,11 +17,14 @@ public class EntityStats : ScriptableObject, ICloneable
 {
     public int maxHealth;
     public float movementSpeed;
+    public float sprintMultiplier;
     public string name;
     public float attackCooldown;
+    public int healthRegenerationRate;
     public int damage;
     public float jumpStrength;
     int currentHealth;
+
     public int getHealth()
     {
         return this.currentHealth;
@@ -52,6 +55,7 @@ public class EntityStats : ScriptableObject, ICloneable
         clone.currentHealth = this.currentHealth;
         clone.isInvincible = this.isInvincible;
         clone.attackCooldown = this.attackCooldown;
+        clone.sprintMultiplier = this.sprintMultiplier;
         return clone;
     }
 
@@ -96,6 +100,10 @@ public class Entity : MonoBehaviour, IHealth
             conditions.Add(condition, false);
         }
     }
+    public float GetSprintingMultiplier()
+    {
+        return Math.Max(stats.sprintMultiplier, 1.0f);
+    }
     public void CloneCondition(Dictionary<Condition, bool> conditionToClone)
     {
         this.conditions = new Dictionary<Condition, bool>();
@@ -112,10 +120,12 @@ public class Entity : MonoBehaviour, IHealth
     }
     public void Damage(int damage)
     {
+
         if (stats.isInvincible == true)
         {
             return;
         }
+        StartCoroutine(invincibleCooldown(Global.Instance.mechanic.iFrame));
         this.stats.setHealth(this.stats.getHealth() - damage);
         if (stats.getHealth() <= 0)
         {
