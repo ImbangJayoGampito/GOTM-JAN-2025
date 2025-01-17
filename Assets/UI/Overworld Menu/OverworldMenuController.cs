@@ -26,8 +26,9 @@ public class OverworldMenuController : MonoBehaviour
     void Update()
     {
         float staminaPercent = (float)movementStats.GetCurrentStamina() / (float)movementStats.maxStamina * 100.0f;
-
+        float healthPercent = (float)playerEntity.stats.getHealth() / (float)playerEntity.stats.maxHealth * 100.0f;
         staminaBar.style.width = new Length(staminaPercent, LengthUnit.Percent);
+        healthBar.style.width = new Length(healthPercent, LengthUnit.Percent);
     }
     void OnEnable()
     {

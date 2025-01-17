@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 public enum Element
 {
 
@@ -34,7 +35,6 @@ public class EnemyStats : ScriptableObject, ICloneable
     [TextArea]
     public string description;
     public float aggroRange;
-    public EnemyType type;
 
     public Element element;
     public Loot loot;
@@ -48,7 +48,6 @@ public class EnemyStats : ScriptableObject, ICloneable
         // Copy the fields from the current instance to the new instance
         clonedStats.description = this.description;
         clonedStats.aggroRange = this.aggroRange;
-        clonedStats.type = this.type;
         clonedStats.element = this.element;
 
         // Deep copy the Loot object, if it is a class and has to be cloned separately
@@ -72,11 +71,39 @@ public class Enemy : MonoBehaviour
 {
     public EnemyStats enemyStats;
     Entity entity;
+    public EnemyType type;
     public void Awake()
     {
         this.enemyStats = (EnemyStats)enemyStats.Clone();
         this.entity = gameObject.GetComponent<Entity>();
     }
+    public Color GetDisplayColor()
+    {
+        Color color = Color.gray;
+        switch (enemyStats.element)
+        {
+            case Element.Earth:
+                color = new Color(150, 75, 0);
+                break;
+            case Element.Fire:
+                color = Color.red;
+                break;
+            case Element.Water:
+                color = Color.blue;
+                break;
+            case Element.Air:
+                color = Color.cyan;
+                break;
+            case Element.Nature:
+                color = Color.green;
+                break;
+        }
+        return color;
+    }
+    public string GetEnemyName()
+    {
 
+        return type.ToString() + " " + entity.stats.name;
+    }
 
 }

@@ -64,6 +64,7 @@ public class Entity : MonoBehaviour, IHealth
 {
     public EntityStats stats;
     public EntityType type;
+    Cooldown healthCooldown;
     public void Initialize(EntityStats stats)
 
     {
@@ -121,7 +122,7 @@ public class Entity : MonoBehaviour, IHealth
     public void Damage(int damage)
     {
 
-        if (stats.isInvincible == true)
+        if (stats.isInvincible == true || this.conditions[Condition.Dead])
         {
             return;
         }
@@ -129,8 +130,48 @@ public class Entity : MonoBehaviour, IHealth
         this.stats.setHealth(this.stats.getHealth() - damage);
         if (stats.getHealth() <= 0)
         {
-            stats.setHealth(0);
+            Die();
+        }
+    }
+    public void Die()
+    {
+        stats.setHealth(0);
+        this.conditions[Condition.Dead] = true;
+
+    }
+    public void Respawn()
+    {
+        this.Initialize(this.stats);
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        Entity other = collision.gameObject.GetComponent<Entity>();
+        if (other != null)
+        {
+
+            Attacked(other);
 
         }
     }
+    void Attacked(Entity other)
+    {
+        if (other.conditions[Condition.Dead] || other.type == this.type)
+        {
+            return;
+        }
+        Damage(Math.Max(0, other.stats.damage));
+        // Debug.Log("Ouch! I got " + other.stats.damage + " damage from " + other.stats.name);
+
+
+    }
+
+    void AttackedByWeapon(Item weapon, Entity attacker)
+    {
+        if (attacker.type == this.type || weapon.GetType().Equals(Type.Consumable) || weapon.GetType().Equals(Type.Material) || weapon.IsEmpty())
+        {
+            return;
+        }
+        Damage(Math.Min(0, weapon.stats.damage));
+    }
+
 }

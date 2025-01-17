@@ -15,6 +15,7 @@ public enum Type
     Mage,
     Consumable,
     Material,
+    Bullet,
     Empty
 }
 [CreateAssetMenu(fileName = "ItemStats", menuName = "Stats/Item")]
@@ -85,6 +86,7 @@ public class Item : MonoBehaviour
     public ItemStats stats;
     private int currentAmount = 0;
     public int startingAmount;
+    // bool strayItem = true;
     public void Awake()
     {
         if (this.stats == null)

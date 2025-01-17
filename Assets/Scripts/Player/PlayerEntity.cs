@@ -40,7 +40,7 @@ public class PlayerEntity : MonoBehaviour
             {
                 return;
             }
-            other.Damage(10);
+            // other.Damage(10);
             Debug.Log("Ouch! my health is now: " + other.stats.getHealth());
         }
 

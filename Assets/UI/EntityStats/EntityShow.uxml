@@ -1,0 +1,5 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/EntityStats/UI%20styliing.uss?fileID=7433441132597879392&amp;guid=afb2c143235df53438f7277112fbb50d&amp;type=3#UI styliing" />
+    <engine:Label text="[ENEMY NAME]" name="Name" style="align-items: center; align-self: center; justify-content: center; align-content: center; -unity-font-style: bold; color: rgb(62, 255, 17); font-size: 29%;" />
+    <engine:ProgressBar value="22" title="Health" name="HealthBar" class="progress-bar" />
+</engine:UXML>

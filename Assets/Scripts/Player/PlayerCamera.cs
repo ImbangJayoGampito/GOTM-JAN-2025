@@ -3,7 +3,7 @@ using System;
 using UnityEngine.InputSystem;
 
 using System.Windows.Input;
-public class Camera : MonoBehaviour
+public class PlayerCamera : MonoBehaviour
 {
     public GameObject target;
     int zoom_value = 5;

@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
   description: The slimiest of all meow
   aggroRange: 0
-  type: 0
+  type: 1
   element: 0

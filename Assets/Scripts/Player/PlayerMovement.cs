@@ -74,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
     {
 
 
-        if (entity.conditions[Entity.Condition.Frozen] == true)
+        if (entity.conditions[Entity.Condition.Frozen] == true || entity.conditions[Entity.Condition.Dead])
         {
             return;
         }
@@ -196,15 +196,6 @@ public class PlayerMovement : MonoBehaviour
             desiredVelocity = desiredVelocity.normalized * entity.stats.movementSpeed;
             rb.linearVelocity = new Vector3(desiredVelocity.x, rb.linearVelocity.y, desiredVelocity.z);
         }
-        if (onGround)
-        {
-            // rb.linearDamping = global.physics.friction;
-        }
-        else
-        {
-            // rb.linearDamping = 0;
-        }
-
         rb.linearDamping = global.physics.friction * (onGround == true ? global.physics.ground_multiply : 1);
     }
 }
