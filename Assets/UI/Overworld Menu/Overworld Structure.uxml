@@ -14,5 +14,7 @@
         <engine:VisualElement name="PictureFrame" style="flex-grow: 1; left: -43px; top: -1px; position: absolute; width: 150px; height: 150px; background-color: rgb(55, 55, 55); flex-direction: row; rotate: 45deg;" />
         <engine:VisualElement name="ProfilePicture" style="flex-grow: 1; left: -38px; top: 4px; position: absolute; width: 140px; height: 140px; background-color: rgba(202, 202, 202, 0.64); flex-direction: row; rotate: 45deg;" />
     </engine:VisualElement>
-    <engine:VisualElement style="flex-grow: 1; width: 15%; height: 15%; top: 68%; left: 2%; position: absolute;" />
+    <engine:VisualElement style="flex-grow: 1; width: 20%; height: 30%; top: 0; left: 80%; position: absolute;">
+        <engine:Image source="path/to/your/image.png" name="minimap-image" style="width: 80%; height: 80%; object-fit: cover; justify-content: space-around; align-self: flex-end; align-content: flex-end;" />
+    </engine:VisualElement>
 </engine:UXML>

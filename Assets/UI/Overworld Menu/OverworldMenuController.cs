@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UIElements;
 public class OverworldMenuController : MonoBehaviour
 {
+    public RenderTexture minimapRender;
+    public Camera minimapCamera;
     VisualElement ui;
     VisualElement healthBar;
 
@@ -10,6 +12,7 @@ public class OverworldMenuController : MonoBehaviour
     VisualElement staminaFrame;
     Entity playerEntity;
     PlayerMovement movementStats;
+    Image minimapImage;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -29,6 +32,8 @@ public class OverworldMenuController : MonoBehaviour
         float healthPercent = (float)playerEntity.stats.getHealth() / (float)playerEntity.stats.maxHealth * 100.0f;
         staminaBar.style.width = new Length(staminaPercent, LengthUnit.Percent);
         healthBar.style.width = new Length(healthPercent, LengthUnit.Percent);
+        Vector3 playerPos = movementStats.gameObject.transform.position;
+        minimapCamera.transform.position = new Vector3(playerPos.x, playerPos.y + 20, playerPos.z);
     }
     void OnEnable()
     {
@@ -36,6 +41,32 @@ public class OverworldMenuController : MonoBehaviour
         healthBar = ui.Q<VisualElement>("HealthBar");
         staminaFrame = ui.Q<VisualElement>("StaminaFrame");
         staminaBar = ui.Q<VisualElement>("StaminaBar");
+        minimapImage = ui.Q<Image>("minimap-image");
+
+        minimapImage.image = minimapRender;
     }
 
+    Texture2D ConvertRenderTextureToTexture2D(RenderTexture renderTexture)
+
+    {
+
+        // Create a new Texture2D with the same dimensions as the RenderTexture
+
+        Texture2D texture2D = new Texture2D(renderTexture.width, renderTexture.height, TextureFormat.RGBA32, false);
+        RenderTexture old_rt = RenderTexture.active;
+
+        // Set the active RenderTexture to the one we want to read from
+
+        RenderTexture.active = renderTexture;
+
+
+        // Read the pixels from the RenderTexture
+
+        texture2D.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
+
+        texture2D.Apply();
+        RenderTexture.active = old_rt;
+        return texture2D;
+
+    }
 }
