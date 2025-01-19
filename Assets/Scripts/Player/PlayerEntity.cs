@@ -4,7 +4,7 @@ public class PlayerEntity : MonoBehaviour
 {
     private Rigidbody rb;
     private Entity entity;
-
+    DialogueUIController dialogueUI;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -12,6 +12,7 @@ public class PlayerEntity : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody>();
 
         entity = gameObject.GetComponent<Entity>();
+        dialogueUI = GameObject.Find("Dialogue").GetComponent<DialogueUIController>();
     }
 
     // Update is called once per frame
@@ -27,22 +28,33 @@ public class PlayerEntity : MonoBehaviour
     {
 
     }
-
+    public DialogueGraph GetDialogue(GameObject objCollision)
+    {
+        Entity other = objCollision.GetComponent<Entity>();
+        if (other == null)
+        {
+            return null;
+        }
+        DialogueGraph graph = objCollision.GetComponent<DialogueGraph>();
+        return graph;
+    }
     private void OnCollisionEnter(Collision collision)
-
     {
 
-        // Called when the collider/rigidbody enters the trigger
-        Entity other = collision.gameObject.GetComponent<Entity>();
-        if (other != null)
+        DialogueGraph dialogueGraph = GetDialogue(collision.gameObject);
+        if (dialogueGraph != null)
         {
-            if (other.type == entity.type)
-            {
-                return;
-            }
-            // other.Damage(10);
-            Debug.Log("Ouch! my health is now: " + other.stats.getHealth());
+            dialogueUI.Trigger(collision.gameObject.GetComponent<Entity>(), dialogueGraph);
         }
 
+
+    }
+    private void OnCollisionExit(Collision collision)
+    {
+        DialogueGraph dialogueGraph = GetDialogue(collision.gameObject);
+        if (dialogueGraph != null)
+        {
+            dialogueUI.End();
+        }
     }
 }

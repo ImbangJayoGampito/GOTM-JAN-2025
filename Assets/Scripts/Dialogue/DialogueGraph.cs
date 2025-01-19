@@ -1,12 +1,34 @@
 using System;
 using System.Collections.Generic;
+using System.Xml;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
+using UnityEditor.Media;
 using UnityEngine;
-
+public enum DialogueSubject
+{
+    Player,
+    Npc
+}
+[Serializable]
+public class Dialogue
+{
+    public string message;
+    public DialogueSubject subject;
+    public Dialogue(string message, DialogueSubject subject)
+    {
+        this.message = message;
+        this.subject = subject;
+    }
+}
+[Serializable]
 public class DialogueNode
 {
+    [SerializeField]
     public String dialogueId;
-    public List<string> dialogue;
+    [SerializeField]
+    public List<Dialogue> dialogue;
+    [SerializeField]
     public List<DialogueDirection> dialogueOptions;
     public bool AppendEdge(DialogueDirection nextDialogue)
     {
@@ -22,6 +44,7 @@ public class DialogueNode
         }
     }
 }
+[Serializable]
 public class DialogueDirection
 {
     public String optionText;
@@ -31,17 +54,64 @@ public class DialogueDirection
         this.optionText = optionText;
         this.targetNode = targetNode;
     }
+
 }
-public class DialogueGraph
+public class DialogueGraph : MonoBehaviour
 {
     Dictionary<String, DialogueNode> dialogues;
-    DialogueNode currentDialogue;
+    List<DialogueNode> dialogueHistory;
+    public DialogueItem dialogueFrame;
+    // bool canTrigger = false;
+    public void Awake()
+    {
+        dialogues = new Dictionary<string, DialogueNode>();
+        dialogueHistory = new List<DialogueNode>();
+        if (dialogueFrame == null)
+        {
+            Debug.LogError("Dialogue is empty, make sure to put it in the script!");
+            return;
+        }
+        foreach (DialogueNode node in dialogueFrame.dialogueSequences)
+        {
+            dialogues.Add(node.dialogueId, node);
+            foreach (DialogueDirection direction in node.dialogueOptions)
+            {
+                node.AppendEdge(direction);
+
+            }
+        }
+        StartDialogue(dialogueFrame.startingDialogue);
+
+    }
+    public void Trigger()
+    {
+
+    }
+    public void End()
+    {
+        if (dialogueHistory.Count > 1)
+        {
+
+            dialogueHistory.RemoveRange(1, dialogueHistory.Count - 1);
+
+        }
+    }
+
+    public void Play()
+    {
+
+    }
+
     public void StartDialogue(DialogueNode startingDialogue)
     {
         if (!dialogues.ContainsKey(startingDialogue.dialogueId)) // Check if the dialogue already exists
         {
             dialogues.Add(startingDialogue.dialogueId, startingDialogue);
-            currentDialogue = startingDialogue; // Set the current dialogue
+            dialogueHistory.Add(startingDialogue); // Set the current dialogue
+            foreach (DialogueDirection direction in startingDialogue.dialogueOptions)
+            {
+                dialogueFrame.startingDialogue.AppendEdge(direction);
+            }
         }
     }
     public bool AddDialogueOption(DialogueNode existingDialogue, DialogueNode dialogueToAdd, String dialogueShow)
@@ -56,22 +126,30 @@ public class DialogueGraph
     }
     public bool IsEnding()
     {
-        return currentDialogue.dialogueOptions?.Count == 0;
+        return dialogueHistory[dialogueHistory.Count - 1].dialogueOptions?.Count == 0;
     }
-    public List<string> ReturnDialogue()
+    public List<Dialogue> ReturnDialogue()
     {
-        return currentDialogue?.dialogue;
+        if (dialogueHistory.Count == 0)
+        {
+            return null;
+        }
+        return dialogueHistory[dialogueHistory.Count - 1]?.dialogue;
     }
     public List<DialogueDirection> ReturnDialogueOptions()
     {
-        return currentDialogue?.dialogueOptions;
+        if (dialogueHistory.Count == 0)
+        {
+            return null;
+        }
+        return dialogueHistory[dialogueHistory.Count - 1].dialogueOptions;
     }
-    public bool Next(String name)
+    public bool Next(string name)
     {
         bool foundNext = dialogues.ContainsKey(name);
         if (foundNext)
         {
-            currentDialogue = dialogues[name];
+            dialogueHistory.Add(dialogues[name]);
         }
         return foundNext;
     }
