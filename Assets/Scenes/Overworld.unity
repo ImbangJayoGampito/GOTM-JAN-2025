@@ -269,9 +269,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 429eb306e103e4b47a41d03372f5563b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 828298617}
-  moveLerp: 0.4
-  rotateLerp: 0.4
 --- !u!1 &186997272
 GameObject:
   m_ObjectHideFlags: 0

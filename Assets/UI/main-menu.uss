@@ -1,0 +1,27 @@
+.Panel {
+    background-color: rgba(0, 255, 216, 0.48);
+}
+
+.menu {
+    align-items: center;
+    align-content: auto;
+}
+
+.unity-button {
+    flex-grow: 1;
+    border-top-left-radius: 26px;
+    border-top-right-radius: 26px;
+    border-bottom-right-radius: 26px;
+    border-bottom-left-radius: 26px;
+    background-color: rgb(0, 37, 255);
+    transition-property: scale;
+    transition-duration: 0.25s;
+}
+
+.unity-button:hover {
+    background-color: rgba(226, 10, 0, 0.9);
+    scale: 1.1 1.1;
+}
+
+.unity-button:active {
+}
