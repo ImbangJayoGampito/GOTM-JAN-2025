@@ -66,24 +66,17 @@ public class Entity : MonoBehaviour, IHealth
     public EntityType type;
     Cooldown healthCooldown;
     public void Initialize(EntityStats stats)
+
     {
-        this.stats = stats;
+        this.stats = (EntityStats)stats.Clone();
         this.stats.Initialize();
         InitiateProperties();
-        healthCooldown = gameObject.AddComponent<Cooldown>();
-        healthCooldown.CooldownByRate(Math.Max(stats.maxHealth / 100, 1));
-    }
-    public void InitializeEnemy(EntityStats stats)
-    {
-        Initialize(stats);
-        this.type = EntityType.Enemy;
     }
     public void Awake()
     {
-        if (stats != null)
-        {
-            Initialize(stats);
-        }
+        EntityStats clonedStats = (EntityStats)stats.Clone();
+        clonedStats.Initialize();
+        this.stats = clonedStats;
         InitiateProperties();
     }
     public void InitiateProperties()
@@ -94,11 +87,6 @@ public class Entity : MonoBehaviour, IHealth
     public void Kill()
     {
         this.stats.setHealth(0);
-
-    }
-    void RegenerateHealth()
-    {
-
     }
     public enum Condition
     {
@@ -111,13 +99,6 @@ public class Entity : MonoBehaviour, IHealth
         foreach (Condition condition in Enum.GetValues(typeof(Condition)))
         {
             conditions.Add(condition, false);
-        }
-    }
-    public void Update()
-    {
-        if (!healthCooldown.IsCooldown())
-        {
-            stats.setHealth(Math.Min(stats.getHealth() + 1, stats.maxHealth));
         }
     }
     public float GetSprintingMultiplier()
@@ -156,12 +137,7 @@ public class Entity : MonoBehaviour, IHealth
     {
         stats.setHealth(0);
         this.conditions[Condition.Dead] = true;
-        PlayerEntity playerEntity = gameObject.GetComponent<PlayerEntity>();
-        if (playerEntity != null)
-        {
-            return;
-        }
-        Destroy(this.gameObject);
+
     }
     public void Respawn()
     {
@@ -169,7 +145,6 @@ public class Entity : MonoBehaviour, IHealth
     }
     private void OnCollisionEnter(Collision collision)
     {
-
         Entity other = collision.gameObject.GetComponent<Entity>();
         if (other != null)
         {
@@ -185,7 +160,7 @@ public class Entity : MonoBehaviour, IHealth
             return;
         }
         Damage(Math.Max(0, other.stats.damage));
-        Debug.Log("Ouch! I got " + other.stats.damage + " damage from " + other.stats.name);
+        // Debug.Log("Ouch! I got " + other.stats.damage + " damage from " + other.stats.name);
 
 
     }

@@ -12,12 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: EntityStats
   m_EditorClassIdentifier: Assembly-CSharp::EntityStats
-  maxHealth: 50
+  maxHealth: 100
   movementSpeed: 2
-  sprintMultiplier: 0
   name: Slime
   attackCooldown: 1
-  healthRegenerationRate: 0
-  damage: 15
+  damage: 5
   jumpStrength: 5
   isInvincible: 0

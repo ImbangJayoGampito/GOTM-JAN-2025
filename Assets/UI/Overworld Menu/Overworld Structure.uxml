@@ -1,13 +1,12 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Overworld%20Menu/Overworld%20Style.uss?fileID=7433441132597879392&amp;guid=13775059b2433484e9edd96e1650ac3d&amp;type=3#Overworld Style" />
-    <engine:Label text="Overworld&#10;" enabled="true" name="time-check" style="align-items: stretch; justify-content: flex-start; align-content: flex-start; align-self: flex-start; top: 94%; font-size: 40px;" />
     <engine:VisualElement name="Buttom" class="bottom" style="flex-grow: 1; height: 8%; width: 100%; position: absolute; top: 92%; left: 0;">
         <engine:Button text="INVENTORY" name="InventoryButton" selectable="false" style="height: 100%; align-items: flex-end; justify-content: flex-end; align-self: center; align-content: flex-end; position: relative; top: auto; left: auto; width: 20%; -unity-font-definition: url(&quot;project://database/Assets/TextMesh%20Pro/Fonts/LiberationSans.ttf?fileID=12800000&amp;guid=e3265ab4bf004d28a9537516768c1c75&amp;type=3#LiberationSans&quot;); -unity-font-style: bold; font-size: 25%; -unity-text-outline-color: rgba(55, 55, 55, 0); background-color: rgb(188, 188, 188);" />
         <engine:Button text="TELEPORT" name="Pause" style="width: 20%; height: 100%; font-size: 25%; -unity-font-style: bold;" />
     </engine:VisualElement>
     <engine:VisualElement name="PlayerStats" style="position: absolute; width: 30%; height: 15%; top: 1px; left: -1px; color: rgb(239, 255, 0);">
         <engine:VisualElement name="HealthFrame" style="flex-grow: 1; left: 94px; top: 100px; position: absolute; width: 400px; height: 20px; background-color: rgb(157, 30, 30); flex-direction: row; rotate: 0; align-self: flex-start;">
-            <engine:VisualElement name="HealthBar" class="labelhealth" style="flex-grow: 1; left: 0; top: 0; position: absolute; width: 100%; height: 100%; background-color: rgb(55, 152, 55); flex-direction: row; rotate: 0;" />
+            <engine:VisualElement name="HealthBar" style="flex-grow: 1; left: 0; top: 0; position: absolute; width: 100%; height: 100%; background-color: rgb(55, 152, 55); flex-direction: row; rotate: 0;" />
         </engine:VisualElement>
         <engine:VisualElement name="StaminaFrame" style="flex-grow: 1; left: 81px; top: 120px; position: absolute; width: 320px; height: 10px; background-color: rgb(199, 101, 29); flex-direction: row; rotate: 0;">
             <engine:VisualElement name="StaminaBar" style="flex-grow: 1; left: 0; top: 0; position: absolute; width: 100%; height: 100%; background-color: rgb(199, 184, 29); flex-direction: row; rotate: 0;" />

@@ -6,13 +6,12 @@ public class OverworldMenuController : MonoBehaviour
     public Camera minimapCamera;
     VisualElement ui;
     VisualElement healthBar;
-    TimeFunction stopwatch;
+
     VisualElement healthFrame;
     VisualElement staminaBar;
     VisualElement staminaFrame;
     Entity playerEntity;
     PlayerMovement movementStats;
-    Label timeLabel;
     Image minimapImage;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -25,15 +24,12 @@ public class OverworldMenuController : MonoBehaviour
         GameObject player = GameObject.FindWithTag("Player");
         playerEntity = player.GetComponent<Entity>();
         movementStats = player.GetComponent<PlayerMovement>();
-        stopwatch = gameObject.AddComponent<TimeFunction>();
-
     }
     // Update is called once per frame
     void Update()
     {
         float staminaPercent = (float)movementStats.GetCurrentStamina() / (float)movementStats.maxStamina * 100.0f;
         float healthPercent = (float)playerEntity.stats.getHealth() / (float)playerEntity.stats.maxHealth * 100.0f;
-        timeLabel.text = TimeFunction.StopwatchFormatter(stopwatch.timePassed);
         staminaBar.style.width = new Length(staminaPercent, LengthUnit.Percent);
         healthBar.style.width = new Length(healthPercent, LengthUnit.Percent);
         Vector3 playerPos = movementStats.gameObject.transform.position;
@@ -46,7 +42,7 @@ public class OverworldMenuController : MonoBehaviour
         staminaFrame = ui.Q<VisualElement>("StaminaFrame");
         staminaBar = ui.Q<VisualElement>("StaminaBar");
         minimapImage = ui.Q<Image>("minimap-image");
-        timeLabel = ui.Q<Label>("time-check");
+
         minimapImage.image = minimapRender;
     }
 
