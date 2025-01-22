@@ -67,15 +67,21 @@ public class EnemyStats : ScriptableObject, ICloneable
         return clonedStats;
     }
 }
+[Serializable]
 public class Enemy : MonoBehaviour
 {
+
+    public EntityStats entityStats;
+
     public EnemyStats enemyStats;
     Entity entity;
     public EnemyType type;
     public void Awake()
     {
         this.enemyStats = (EnemyStats)enemyStats.Clone();
-        this.entity = gameObject.GetComponent<Entity>();
+        Entity entity = gameObject.AddComponent<Entity>();
+        entity.InitializeEnemy((EntityStats)entityStats.Clone());
+        this.entity = entity;
     }
     public Color GetDisplayColor()
     {

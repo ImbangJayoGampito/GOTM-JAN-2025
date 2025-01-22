@@ -138,8 +138,8 @@ public class PlayerMovement : MonoBehaviour
         int staminaCost = 10;
         if (Input.GetKeyDown(global.controller.jump) && currentStamina >= staminaCost)
         {
-            rb.AddForce(Vector3.up * entity.stats.jumpStrength * 1000, ForceMode.Impulse);
-            currentStamina = Math.Clamp(currentStamina - staminaCost, 0, 100);
+            // rb.AddForce(Vector3.up * entity.stats.jumpStrength * 1000, ForceMode.Impulse);
+            // currentStamina = Math.Clamp(currentStamina - staminaCost, 0, 100);
             // Debug.Log("meowww");
 
         }
