@@ -21,7 +21,10 @@ public class EnemyInfoController : MonoBehaviour
     {
         Vector3 mousePos = Input.mousePosition;
         Ray ray = cam.ScreenPointToRay(mousePos);
-
+        Vector2 newPosition = RuntimePanelUtils.ScreenToPanel(root.panel, new Vector2(mousePos.x, Screen.height - mousePos.y));
+        // newPosition.x -= root.resolvedStyle.width / 2; // Center the element
+        // newPosition.y = Screen.height - newPosition.y; // Flip Y coordinate
+        root.transform.position = new Vector2(newPosition.x - root.resolvedStyle.width / 2, newPosition.y - root.resolvedStyle.height / 2);
         // Debug.DrawRay(cam.transform.position, mousePos - cam.transform.position, Color.red);
 
         RaycastHit hit;
@@ -36,7 +39,7 @@ public class EnemyInfoController : MonoBehaviour
                 root.style.display = DisplayStyle.None;
                 return;
             }
-            root.style.display = DisplayStyle.Flex;
+
             Enemy enemy = objHit.GetComponent<Enemy>();
             Color color = entityNameLabel.resolvedStyle.color;
             String name = entity.stats.name;
@@ -48,14 +51,10 @@ public class EnemyInfoController : MonoBehaviour
             entityNameLabel.text = name;
             entityNameLabel.style.color = color;
             float healthPercent = (float)entity.stats.getHealth() / (float)entity.stats.maxHealth * 100f;
-            Debug.Log("current health = " + healthPercent);
+           //  Debug.Log("current health = " + healthPercent);
             // Debug.Log("max health = " )
             healthBar.value = healthPercent;
-            Vector2 newPosition = RuntimePanelUtils.ScreenToPanel(root.panel, new Vector2(mousePos.x, Screen.height - mousePos.y));
-            // newPosition.x -= root.resolvedStyle.width / 2; // Center the element
-            // newPosition.y = Screen.height - newPosition.y; // Flip Y coordinate
-            root.transform.position = new Vector2(newPosition.x - root.resolvedStyle.width / 2, newPosition.y - root.resolvedStyle.height / 2);
-
+            root.style.display = DisplayStyle.Flex;
         }
     }
     public Entity ObjectHit(GameObject hit, Vector2 mousePos)
