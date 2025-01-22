@@ -304,9 +304,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fa368e6f17c6b54599095f9691db12a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityStats: {fileID: 11400000, guid: dacf889cde6d5f64db8aead96315a2be, type: 2}
-  enemyStats: {fileID: 11400000, guid: 8e3515e3bab9ccb429b55708e5cc3d29, type: 2}
-  type: 1
 --- !u!65 &295478789
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1664,9 +1661,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fa368e6f17c6b54599095f9691db12a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityStats: {fileID: 11400000, guid: dacf889cde6d5f64db8aead96315a2be, type: 2}
-  enemyStats: {fileID: 11400000, guid: 8e3515e3bab9ccb429b55708e5cc3d29, type: 2}
-  type: 1
 --- !u!65 &1620562305
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2083,6 +2077,5 @@ SceneRoots:
   - {fileID: 1654522435}
   - {fileID: 1901655432}
   - {fileID: 582173953}
-  - {fileID: 406395059}
   - {fileID: 5506288579313870674}
   - {fileID: 682520012}

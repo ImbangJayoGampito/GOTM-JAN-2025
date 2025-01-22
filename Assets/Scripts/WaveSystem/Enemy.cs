@@ -66,6 +66,7 @@ public class EnemyStats : ScriptableObject, ICloneable
 
         return clonedStats;
     }
+
 }
 [Serializable]
 public class Enemy : MonoBehaviour
@@ -75,10 +76,18 @@ public class Enemy : MonoBehaviour
 
     public EnemyStats enemyStats;
     Entity entity;
-    public EnemyType type;
+    public EnemyType type = EnemyType.Rookie;
+    public void SetType()
+    {
+
+    }
+    public bool IsDead()
+    {
+        return entity.conditions[Entity.Condition.Dead];
+    }
     public void Awake()
     {
-        this.enemyStats = (EnemyStats)enemyStats.Clone();
+        // SetType();
         Entity entity = gameObject.AddComponent<Entity>();
         entity.InitializeEnemy((EntityStats)entityStats.Clone());
         this.entity = entity;

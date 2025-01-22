@@ -15,9 +15,17 @@ MonoBehaviour:
   waves:
   - waveTime: 0
     enemiesIncoming:
-    - enemy: {fileID: 0}
+    - enemy: {fileID: -8139222230122475968, guid: c9a0c315338efd84a852c27572be0533, type: 3}
       amount: 4
-    - enemy: {fileID: 0}
+    - enemy: {fileID: -8139222230122475968, guid: f5e27accc4368104bb2b1092d661f19d, type: 3}
+      amount: 4
+    playingDialogue: {fileID: 0}
+    goldReward: 0
+  - waveTime: 0
+    enemiesIncoming:
+    - enemy: {fileID: -8139222230122475968, guid: f5e27accc4368104bb2b1092d661f19d, type: 3}
+      amount: 4
+    - enemy: {fileID: -8139222230122475968, guid: f5e27accc4368104bb2b1092d661f19d, type: 3}
       amount: 4
     playingDialogue: {fileID: 0}
     goldReward: 0

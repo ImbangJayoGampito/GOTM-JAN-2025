@@ -161,11 +161,13 @@ public class Entity : MonoBehaviour, IHealth
         {
             return;
         }
-        Destroy(this.gameObject);
+
+        this.gameObject.SetActive(false);
     }
     public void Respawn()
     {
         this.Initialize(this.stats);
+        this.gameObject.SetActive(false);
     }
     private void OnCollisionEnter(Collision collision)
     {
