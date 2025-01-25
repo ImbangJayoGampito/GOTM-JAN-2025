@@ -3,10 +3,11 @@ using NUnit.Framework.Constraints;
 using Unity.VisualScripting;
 using UnityEditor.Callbacks;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-
+    [SerializeField] public InputSubscription playerInput;
     Global global;
     public GameObject cameraTarget;
     public int maxStamina;
@@ -28,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        playerInput = GetComponent<InputSubscription>();
         global = Global.Instance;
         if (global == null)
         {
@@ -83,6 +85,7 @@ public class PlayerMovement : MonoBehaviour
         JumpFunction();
         StaminaRegeneration();
         Sprint();
+        Debug.Log(playerInput.Dragging);
     }
     void StaminaRegeneration()
     {
@@ -104,14 +107,8 @@ public class PlayerMovement : MonoBehaviour
             isRunning = false;
             return;
         }
-        if (Input.GetKeyDown(global.controller.sprint))
-        {
-            isRunning = true;
-        }
-        if (Input.GetKeyUp(global.controller.sprint))
-        {
-            isRunning = false;
-        }
+        isRunning = playerInput.Sprint;
+
         if (!staminaExhaust.IsCooldown() && isRunning)
         {
             // Debug.Log("meow tired!");
@@ -136,7 +133,7 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
         int staminaCost = 10;
-        if (Input.GetKeyDown(global.controller.jump) && currentStamina >= staminaCost)
+        if (playerInput.Jump && currentStamina >= staminaCost)
         {
             // rb.AddForce(Vector3.up * entity.stats.jumpStrength * 1000, ForceMode.Impulse);
             // currentStamina = Math.Clamp(currentStamina - staminaCost, 0, 100);
@@ -150,30 +147,13 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
-        float moveX = 0;
-        float moveZ = 0;
 
-        if (Input.GetKey(global.controller.forward))
-        {
-            moveZ += 1; // Move forward
-        }
-        if (Input.GetKey(global.controller.backwards))
-        {
-            moveZ -= 1; // Move backward
-        }
-        if (Input.GetKey(global.controller.left))
-        {
-            moveX -= 1; // Move left
-        }
-        if (Input.GetKey(global.controller.right))
-        {
-            moveX += 1; // Move right
-        }
 
+        Vector2 playerMove = playerInput.MoveInput;
         // Check for sprinting
 
 
-        moveDirection = ((forward * moveZ) + (right * moveX)).normalized;
+        moveDirection = ((forward * playerMove.y) + (right * playerMove.x)).normalized;
 
         // Create the movement vector
         // Move the Rigidbody

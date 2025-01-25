@@ -25,6 +25,7 @@ public class OverworldMenuController : MonoBehaviour
         GameObject player = GameObject.FindWithTag("Player");
         playerEntity = player.GetComponent<Entity>();
         movementStats = player.GetComponent<PlayerMovement>();
+        Debug.Log(player);
         stopwatch = gameObject.AddComponent<TimeFunction>();
 
     }

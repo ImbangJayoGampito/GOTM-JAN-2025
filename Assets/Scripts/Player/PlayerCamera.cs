@@ -6,6 +6,7 @@ using System.Windows.Input;
 public class PlayerCamera : MonoBehaviour
 {
     public GameObject target;
+    [SerializeField] public InputSubscription playerInput;
     int zoom_value = 5;
     int max_zoom = 10;
     public float moveLerp = 0.4f;
@@ -23,6 +24,7 @@ public class PlayerCamera : MonoBehaviour
     {
         global = Global.Instance;
         transform.position = target.transform.position;
+        playerInput = GetComponent<InputSubscription>();
     }
 
     // Update is called once per frame
@@ -33,15 +35,16 @@ public class PlayerCamera : MonoBehaviour
         CameraFirstPerson();
         CameraThirdPerson();
         CameraZoom();
-
+        Debug.Log(playerInput.Zoom);
     }
     float xRotation;
     float yRotation;
     float sens = 10.0f;
     public void CameraRotation()
     {
-        float mouseX = Input.GetAxis("Mouse X") * sens;
-        float mouseY = Input.GetAxis("Mouse Y") * sens;
+        float mouseX = playerInput.LookInput.x;
+        float mouseY = playerInput.LookInput.y;
+
         yRotation += mouseX;
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90.0f, 90.0f);
@@ -72,11 +75,11 @@ public class PlayerCamera : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
+        if (playerInput.Zoom > 0f) // forward
         {
             zoom_value--;
         }
-        else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
+        else if (playerInput.Zoom < 0f) // backwards
         {
             zoom_value++;
         }
@@ -95,7 +98,7 @@ public class PlayerCamera : MonoBehaviour
         Vector3 desiredPosition = target.transform.position + rotation * direction;
         desiredPosition = AccountForWalls(desiredPosition, target.transform.position);
 
-        if (Input.GetMouseButton((int)global.controller.moveCamera))
+        if (playerInput.Dragging)
         {
             CameraRotation();
             Cursor.SetCursor(null, mousePos, CursorMode.Auto);

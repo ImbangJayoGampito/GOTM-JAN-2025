@@ -33,7 +33,7 @@ public class Global : MonoBehaviour
     public class Physics
     {
         public float friction = 2f;
-        public float ground_multiply = 3.0f;
+        public float ground_multiply = 1.5f;
 
     }
     public class Mechanic
