@@ -270,6 +270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 828298617}
+  playerInput: {fileID: 0}
   moveLerp: 0.4
   rotateLerp: 0.4
 --- !u!1 &295478786
@@ -937,8 +938,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0ddded885aaea2418731ebf25855a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveSystem: {fileID: 11400000, guid: 00188dc320d505740b21d78235c9d8df, type: 2}
-  spawnRate: 2
 --- !u!1 &828298617
 GameObject:
   m_ObjectHideFlags: 0
@@ -1389,6 +1388,7 @@ GameObject:
   - component: {fileID: 1541918812}
   - component: {fileID: 1541918813}
   - component: {fileID: 1541918814}
+  - component: {fileID: 1541918815}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1435,6 +1435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a68ceaa610a61541b435d48260b4021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInput: {fileID: 0}
   cameraTarget: {fileID: 828298617}
   maxStamina: 100
   staminaRegenerationRate: 2
@@ -1525,6 +1526,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: 36
+--- !u!114 &1541918815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1541918804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a8977272b8659249a7024f19e59978e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1549720369
 GameObject:
   m_ObjectHideFlags: 0
